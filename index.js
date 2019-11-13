@@ -39,9 +39,30 @@ Airplane.prototype.land = function () {
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
 
+  this.stomach = [];
 }
+
+Person.prototype.eat = function(food)
+{
+  if (this.stomach.length < 10)
+    { this.stomach.push(food); }
+}
+
+Person.prototype.poop = function()
+{
+  this.stomach = [];
+}
+
+Person.prototype.toString = function()
+{
+  return this.name + ", " + this.age;
+}
+
+
 
 /*
   TASK 2
@@ -57,8 +78,38 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
+function Car(model, milesPerGallon) {
+  
+  this.tank = 0;
+  this.odometer = 0;
+  
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
 
+}
+
+Car.prototype.fill = function(gallons)
+{
+  this.tank += gallons;
+}
+
+Car.prototype.drive = function(distance)
+{
+  const gallonsNeeded = distance / this.milesPerGallon;
+
+  if (gallonsNeeded >= this.tank)
+  {
+    const actualMilesDriven = this.milesPerGallon * this.tank;
+    this.odometer += actualMilesDriven;
+    this.tank = 0;
+
+    return "I ran out of fuel at " + this.odometer + " miles!";
+  }
+  else
+  {
+    this.tank -= gallonsNeeded;
+    this.odometer += distance;
+  }
 }
 
 /*
@@ -68,18 +119,30 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
 
+Baby.prototype = Object.create(Person.prototype);
+
+function Baby(name, age, favoriteToy) {
+  
+  this.name = name;
+  this.age = age;
+
+  this.favoriteToy = favoriteToy;
+}
+
+Baby.prototype.play = function() {
+  return `Playing with ${this.favoriteToy}`;
 }
 
 /* 
   TASK 4
 
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. New binding: when an object is created using the "new" keyword, "this" will point to the newly created object.
+  2. Explicit binding: When you want this to refer to a designated object, you can use call, apply, or bind with the designated object as an argument.
+      This is often a different object than what is to the left of these methods.
+  3. Implicit binding is used when you are working with objects with methods. This type of binding is used to refer to a particular method belonging to an object (which will be found to the left of the dot).
+  4. Window binding: When none of the above rules apply, "this" defaults to the window object. If strict mode is used, "this" returns undefined instead of the window object to help avoid breaking code.
 */
 
 
